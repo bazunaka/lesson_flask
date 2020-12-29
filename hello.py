@@ -1,7 +1,15 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
+from flask_wtf import Form
+from wtforms import StringField, SubmitField
+from wtforms.validators import Required
+
+class NameForm(Form):
+   name = StringField('Ваше имя?', validators=[Required()])
+   submit = SubmitField('Подтвердить')
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'hard to guess string'
 bootstrap = Bootstrap(app)
 
 @app.route('/')
