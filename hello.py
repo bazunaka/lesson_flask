@@ -4,7 +4,12 @@ from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
+from flask_script import Shell
 import os
+
+def make_shell_context():
+   return dict(app = app, db = db, User = User, Role = Role)
+manager.add_command("shell", Shell(make_context=make_shell_context))
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
