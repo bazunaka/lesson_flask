@@ -6,6 +6,7 @@ from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
 from flask_script import Shell, Manager
 from flask_migrate import Migrate, MigrateCommand
+from flask_mail import Mail
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -17,7 +18,7 @@ class NameForm(Form):
 app = Flask(__name__)
 manager = Manager(app)
 app.config['SECRET_KEY'] = 'hard to guess string'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'flask.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:flasflask.db'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
 bootstrap = Bootstrap(app)
@@ -29,6 +30,8 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 
 migrate = Migrate(app, db)
 manager.add_command('db', MigrateCommand)
+
+mail = Mail(app)
 
 class Role (db.Model):
    __tablename__ = 'roles'
