@@ -12,20 +12,33 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-app = Flask(__name__)
+class NameForm(Form):
+    name = StringField(
+        "What is your name?",
+        validators=[Required()],  # валидация - запрет пустой строки
+    )  # input, где type=text
+    submit = SubmitField("Submit")  # input, где type=submit
 
+
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "hard to guess string"
 
 bootstrap = Bootstrap(app)
 
 
-@app.route("/index")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ""
+    return render_template("index.html", form=form, name=name)
 
 
 @app.route("/user/<name>")
-def user():
-    return render_template("user.html")
+def user(name):
+    return render_template("user.html", name=name)
 
 
 @app.errorhandler(404)
